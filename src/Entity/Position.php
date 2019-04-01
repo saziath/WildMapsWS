@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +32,23 @@ class Position
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Hotel", mappedBy="idP", orphanRemoval=true)
+     */
+    private $IdH;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Activite", mappedBy="idP")
+     */
+    private $idA;
+
+    public function __construct()
+    {
+        $this->IdH = new ArrayCollection();
+        $this->idA = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -71,4 +90,67 @@ class Position
 
         return $this;
     }
+
+    /**
+     * @return Collection|Hotel[]
+     */
+    public function getIdH(): Collection
+    {
+        return $this->IdH;
+    }
+
+    public function addIdH(Hotel $idH): self
+    {
+        if (!$this->IdH->contains($idH)) {
+            $this->IdH[] = $idH;
+            $idH->setIdP($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdH(Hotel $idH): self
+    {
+        if ($this->IdH->contains($idH)) {
+            $this->IdH->removeElement($idH);
+            // set the owning side to null (unless already changed)
+            if ($idH->getIdP() === $this) {
+                $idH->setIdP(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Activite[]
+     */
+    public function getIdA(): Collection
+    {
+        return $this->idA;
+    }
+
+    public function addIdA(Activite $idA): self
+    {
+        if (!$this->idA->contains($idA)) {
+            $this->idA[] = $idA;
+            $idA->setIdP($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdA(Activite $idA): self
+    {
+        if ($this->idA->contains($idA)) {
+            $this->idA->removeElement($idA);
+            // set the owning side to null (unless already changed)
+            if ($idA->getIdP() === $this) {
+                $idA->setIdP(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
