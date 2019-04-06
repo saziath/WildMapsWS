@@ -36,6 +36,11 @@ class Activite
      */
     private $idP;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Itinairaire", inversedBy="IdA")
+     */
+    private $IdI;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +90,18 @@ class Activite
     public function setIdP(?position $idP): self
     {
         $this->idP = $idP;
+
+        return $this;
+    }
+
+    public function getIdI(): ?Itinairaire
+    {
+        return $this->IdI;
+    }
+
+    public function setIdI(?Itinairaire $IdI): self
+    {
+        $this->IdI = $IdI;
 
         return $this;
     }
